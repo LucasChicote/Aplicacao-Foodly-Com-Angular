@@ -1,26 +1,60 @@
-<div class="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-  <form [formGroup]="CadastroForm" (ngSubmit)="enviar()" class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-    <h2 class="text-2xl font-bold text-orange-600 mb-6 text-center">Cadastro Foodly</h2>
-
-    <div class="space-y-4">
-      <input formControlName="nome" placeholder="Nome Completo" class="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none">
-      <input formControlName="email" type="email" placeholder="E-mail" class="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none">
-      <input formControlName="senha" type="password" placeholder="Crie uma Senha" class="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none">
-
-      <div class="flex gap-2">
-        <input formControlName="cep" (input)="buscarEndereco()" maxlength="8" placeholder="CEP (apenas números)" class="flex-1 p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none">
-      </div>
-
-      <input formControlName="rua" placeholder="Rua / Logradouro" class="w-full p-2 border rounded bg-gray-50 text-gray-500">
-      <input formControlName="bairro" placeholder="Bairro" class="w-full p-2 border rounded bg-gray-50 text-gray-500">
-
-      <button type="submit" [disabled]="CadastroForm.invalid" class="w-full mt-6 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white font-bold py-3 rounded-lg transition">
-        Finalizar Cadastro
-      </button>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4 font-sans">
+  <div class="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-gray-200/50 w-full max-w-[480px] border border-gray-100">
+    
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-black text-gray-900 tracking-tighter">Criar Conta</h2>
+      <p class="text-gray-400 text-sm font-medium mt-1">Rápido, fácil e cheio de sabor.</p>
     </div>
 
-    <p class="mt-4 text-center text-sm">
-      Já tem conta? <a href="/login" class="text-orange-500 font-bold">Faça Login</a>
-    </p>
-  </form>
+    <form [formGroup]="CadastroForm" (ngSubmit)="enviar()" class="space-y-4">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Nome</label>
+          <input formControlName="nome" placeholder="Seu nome completo"
+            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">E-mail</label>
+          <input formControlName="email" type="email" placeholder="seu@email.com"
+            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Senha</label>
+          <input formControlName="senha" type="password" placeholder="Cire uma senha"
+            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">CEP</label>
+            <input formControlName="cep" (input)="buscarEndereco()" maxlength="8" placeholder="00000000"
+              class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Bairro</label>
+            <input formControlName="bairro" class="w-full bg-gray-100 border-none rounded-2xl p-4 text-gray-400 cursor-not-allowed">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Rua</label>
+          <input formControlName="rua" class="w-full bg-gray-100 border-none rounded-2xl p-4 text-gray-400 cursor-not-allowed">
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="CadastroForm.invalid" 
+        class="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-200 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-orange-200 active:scale-[0.98] mt-6 uppercase tracking-widest text-sm">
+        Finalizar Cadastro
+      </button>
+    </form>
+    
+    <div class="mt-8 text-center border-t border-gray-50 pt-6">
+      <p class="text-gray-400 text-sm font-medium">
+        Já tem uma conta? 
+        <a href="/login" class="text-orange-500 font-bold hover:underline ml-1">Fazer Login</a>
+      </p>
+    </div>
+  </div>
 </div>
