@@ -1,60 +1,189 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4 font-sans">
-  <div class="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-gray-200/50 w-full max-w-[480px] border border-gray-100">
-    
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-black text-gray-900 tracking-tighter">Criar Conta</h2>
-      <p class="text-gray-400 text-sm font-medium mt-1">Rápido, fácil e cheio de sabor.</p>
-    </div>
+<div class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4 font-sans relative overflow-hidden">
 
-    <form [formGroup]="CadastroForm" (ngSubmit)="enviar()" class="space-y-4">
-      <div class="grid grid-cols-1 gap-4">
-        <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Nome</label>
-          <input formControlName="nome" placeholder="Seu nome completo"
-            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
-        </div>
+  <div class="absolute -top-24 -right-24 w-72 h-72 bg-green-200/30 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-200/30 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">E-mail</label>
-          <input formControlName="email" type="email" placeholder="seu@email.com"
-            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
-        </div>
+  <div class="relative bg-white/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl shadow-green-100/50 w-full max-w-[500px] border border-green-100 overflow-hidden">
 
-        <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Senha</label>
-          <input formControlName="senha" type="password" placeholder="Cire uma senha"
-            class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
-        </div>
+    @if (etapa() === 'tipo') {
+      <div class="p-10">
 
-        <div class="grid grid-cols-3 gap-3">
-          <div class="col-span-1">
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">CEP</label>
-            <input formControlName="cep" (input)="buscarEndereco()" maxlength="8" placeholder="00000000"
-              class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+        <a routerLink="/login" class="flex items-center gap-2 text-sm text-gray-400 hover:text-green-600 transition mb-8 w-fit">
+          <lucide-icon name="arrow-left" class="w-4 h-4"></lucide-icon>
+          Voltar ao login
+        </a>
+
+        <div class="text-center mb-8">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200 mx-auto mb-4">
+            <lucide-icon name="user-plus" class="w-8 h-8 text-white"></lucide-icon>
           </div>
-          <div class="col-span-2">
-            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Bairro</label>
-            <input formControlName="bairro" class="w-full bg-gray-100 border-none rounded-2xl p-4 text-gray-400 cursor-not-allowed">
-          </div>
+          <h2 class="text-3xl font-black text-gray-900 tracking-tighter">Criar Conta</h2>
+          <p class="text-gray-400 text-sm mt-1">Como você quer se cadastrar?</p>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 mb-1">Rua</label>
-          <input formControlName="rua" class="w-full bg-gray-100 border-none rounded-2xl p-4 text-gray-400 cursor-not-allowed">
+        <div class="space-y-3">
+          @for (tipo of tipos; track tipo.role) {
+            <button (click)="selecionarTipo(tipo.role)"
+              class="w-full flex items-center gap-5 p-5 bg-white border-2 border-gray-100 rounded-2xl hover:border-green-300 hover:bg-green-50/50 transition-all group text-left active:scale-[0.99]">
+
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-none transition"
+                   [class.bg-green-100]="tipo.cor === 'green'"
+                   [class.bg-teal-100]="tipo.cor === 'teal'"
+                   [class.bg-gray-100]="tipo.cor === 'gray'">
+                <lucide-icon [name]="tipo.icon" class="w-6 h-6"
+                  [class.text-green-600]="tipo.cor === 'green'"
+                  [class.text-teal-600]="tipo.cor === 'teal'"
+                  [class.text-gray-500]="tipo.cor === 'gray'">
+                </lucide-icon>
+              </div>
+
+              <div class="flex-1">
+                <h3 class="font-black text-gray-800 group-hover:text-green-700 transition text-base">{{ tipo.titulo }}</h3>
+                <p class="text-xs text-gray-400 mt-0.5 leading-relaxed">{{ tipo.descricao }}</p>
+              </div>
+
+              <lucide-icon name="chevron-right" class="w-5 h-5 text-gray-200 group-hover:text-green-400 transition flex-none"></lucide-icon>
+            </button>
+          }
         </div>
+
+        <p class="mt-8 text-center text-sm text-gray-400">
+          Já tem conta?
+          <a routerLink="/login" class="text-green-600 font-bold hover:underline ml-1">Entrar</a>
+        </p>
       </div>
+    }
 
-      <button type="submit" [disabled]="CadastroForm.invalid" 
-        class="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-200 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-orange-200 active:scale-[0.98] mt-6 uppercase tracking-widest text-sm">
-        Finalizar Cadastro
-      </button>
-    </form>
-    
-    <div class="mt-8 text-center border-t border-gray-50 pt-6">
-      <p class="text-gray-400 text-sm font-medium">
-        Já tem uma conta? 
-        <a href="/login" class="text-orange-500 font-bold hover:underline ml-1">Fazer Login</a>
-      </p>
-    </div>
+    @if (etapa() === 'dados') {
+      <div class="p-10">
+
+        <div class="flex items-center gap-3 mb-8">
+          <button (click)="voltarEtapa()"
+            class="flex items-center gap-1 text-sm text-gray-400 hover:text-green-600 transition">
+            <lucide-icon name="arrow-left" class="w-4 h-4"></lucide-icon>
+            Voltar
+          </button>
+          <div class="flex-1"></div>
+          
+          <div class="flex items-center gap-2 bg-green-50 border border-green-100 rounded-full px-4 py-2">
+            <lucide-icon [name]="getTipoAtual().icon" class="w-4 h-4 text-green-600"></lucide-icon>
+            <span class="text-xs font-black text-green-700">{{ getTipoAtual().titulo }}</span>
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-black text-gray-900 mb-1">Seus dados</h2>
+        <p class="text-gray-400 text-sm mb-8">Preencha para criar sua conta como <strong class="text-green-600">{{ getTipoAtual().titulo }}</strong>.</p>
+
+        @if (erro) {
+          <div class="bg-red-50 border border-red-100 text-red-500 text-sm rounded-2xl px-4 py-3 mb-5 flex items-center gap-2">
+            <lucide-icon name="alert-circle" class="w-4 h-4 flex-none"></lucide-icon>
+            {{ erro }}
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="enviar()" class="space-y-4">
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+              {{ getLabelNome() }}
+            </label>
+            <div class="relative">
+              <lucide-icon name="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300"></lucide-icon>
+              <input formControlName="nome" [placeholder]="getPlaceholderNome()"
+                class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 pl-12 outline-none focus:ring-2 focus:ring-green-400/30 focus:border-green-300 transition text-gray-700">
+            </div>
+            @if (form.get('nome')?.invalid && form.get('nome')?.touched) {
+              <p class="text-red-400 text-xs mt-1 ml-2">Campo obrigatório</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">E-mail</label>
+            <div class="relative">
+              <lucide-icon name="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300"></lucide-icon>
+              <input formControlName="email" type="email" placeholder="seu@email.com"
+                class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 pl-12 outline-none focus:ring-2 focus:ring-green-400/30 focus:border-green-300 transition text-gray-700">
+            </div>
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
+              <p class="text-red-400 text-xs mt-1 ml-2">E-mail inválido</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Senha</label>
+            <div class="relative">
+              <lucide-icon name="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300"></lucide-icon>
+              <input formControlName="senha" [type]="mostrarSenha() ? 'text' : 'password'"
+                placeholder="Mínimo 6 caracteres"
+                class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 pl-12 pr-14 outline-none focus:ring-2 focus:ring-green-400/30 focus:border-green-300 transition text-gray-700">
+              <button type="button" (click)="toggleSenha()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-green-500 transition">
+                <lucide-icon [name]="mostrarSenha() ? 'eye-off' : 'eye'" class="w-5 h-5"></lucide-icon>
+              </button>
+            </div>
+            @if (form.get('senha')?.invalid && form.get('senha')?.touched) {
+              <p class="text-red-400 text-xs mt-1 ml-2">Mínimo 6 caracteres</p>
+            }
+          </div>
+
+          <div class="grid grid-cols-5 gap-3">
+            <div class="col-span-2">
+              <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">CEP</label>
+              <div class="relative">
+                <lucide-icon name="map-pin" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300"></lucide-icon>
+                <input formControlName="cep" (input)="buscarEndereco()" maxlength="8" placeholder="00000000"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 pl-10 outline-none focus:ring-2 focus:ring-green-400/30 focus:border-green-300 transition text-gray-700">
+              </div>
+            </div>
+            <div class="col-span-3">
+              <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">
+                Bairro
+                @if (cepCarregando) {
+                  <lucide-icon name="loader" class="w-3 h-3 inline animate-spin ml-1"></lucide-icon>
+                }
+              </label>
+              <input formControlName="bairro"
+                class="w-full bg-gray-100 border border-gray-100 rounded-2xl p-4 text-gray-400 cursor-not-allowed outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Rua</label>
+            <input formControlName="rua"
+              class="w-full bg-gray-100 border border-gray-100 rounded-2xl p-4 text-gray-400 cursor-not-allowed outline-none">
+          </div>
+
+          @if (roleSelecionada() === 'ROLE_RESTAURANT_OWNER') {
+            <div class="bg-teal-50 border border-teal-100 rounded-2xl p-4 flex items-start gap-3">
+              <lucide-icon name="info" class="w-5 h-5 text-teal-500 flex-none mt-0.5"></lucide-icon>
+              <p class="text-xs text-teal-700 leading-relaxed">
+                Após o cadastro você poderá <strong>cadastrar seu restaurante</strong> e adicionar seus pratos no painel do restaurante.
+              </p>
+            </div>
+          }
+          @if (roleSelecionada() === 'ROLE_ADMIN') {
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-start gap-3">
+              <lucide-icon name="shield-check" class="w-5 h-5 text-gray-500 flex-none mt-0.5"></lucide-icon>
+              <p class="text-xs text-gray-600 leading-relaxed">
+                Como <strong>Administrador</strong> você terá acesso ao painel de gerenciamento da plataforma.
+              </p>
+            </div>
+          }
+
+          <button type="submit" [disabled]="form.invalid || carregando"
+            class="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 disabled:from-gray-200 disabled:to-gray-200 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-green-200 active:scale-[0.98] mt-2 flex items-center justify-center gap-2">
+            @if (carregando) {
+              <lucide-icon name="loader" class="w-5 h-5 animate-spin"></lucide-icon>
+              Criando conta...
+            } @else {
+              <lucide-icon name="check-circle" class="w-5 h-5"></lucide-icon>
+              Finalizar Cadastro
+            }
+          </button>
+
+        </form>
+      </div>
+    }
+
   </div>
 </div>

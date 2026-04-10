@@ -1,0 +1,84 @@
+<div class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex flex-col font-sans overflow-hidden">
+
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-green-200/30 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-100/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <header class="relative z-10 px-8 py-6 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200">
+        <span class="text-white text-xl">🌱</span>
+      </div>
+      <span class="text-2xl font-black text-gray-800 tracking-tight">Foodly</span>
+    </div>
+    <a routerLink="/login"
+      class="text-sm font-bold text-green-700 hover:text-green-800 transition border border-green-200 px-4 py-2 rounded-full hover:bg-green-50">
+      Já tenho conta
+    </a>
+  </header>
+
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto py-12">
+
+    <div class="mb-8 relative">
+      <div class="w-32 h-32 bg-gradient-to-br from-green-400 to-teal-500 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-green-300/50 mx-auto rotate-3">
+        <span class="text-6xl">🌿</span>
+      </div>
+      <div class="absolute -top-2 -right-2 w-10 h-10 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+        <span class="text-xl">♻️</span>
+      </div>
+      <div class="absolute -bottom-2 -left-2 w-10 h-10 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+        <span class="text-xl">🥗</span>
+      </div>
+    </div>
+
+    <h1 class="text-5xl md:text-6xl font-black text-gray-900 tracking-tighter leading-tight mb-4">
+      Comida boa,<br>
+      <span class="bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+        planeta melhor.
+      </span>
+    </h1>
+
+    <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+      O <strong class="text-gray-700">Foodly</strong> é o app de delivery que conecta você a restaurantes
+      sustentáveis e conscientes. Peça sua refeição favorita sabendo que cada pedido contribui para
+      um futuro mais verde. 🌍
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl mb-12">
+      <div class="bg-white/70 backdrop-blur-sm border border-green-100 rounded-3xl p-6 text-left shadow-sm">
+        <div class="text-3xl mb-3">🥦</div>
+        <h3 class="font-black text-gray-800 mb-1">Comida Saudável</h3>
+        <p class="text-sm text-gray-500">Restaurantes comprometidos com ingredientes frescos e naturais.</p>
+      </div>
+      <div class="bg-white/70 backdrop-blur-sm border border-green-100 rounded-3xl p-6 text-left shadow-sm">
+        <div class="text-3xl mb-3">🚲</div>
+        <h3 class="font-black text-gray-800 mb-1">Entrega Verde</h3>
+        <p class="text-sm text-gray-500">Parceiros que priorizam embalagens recicláveis e entregas sustentáveis.</p>
+      </div>
+      <div class="bg-white/70 backdrop-blur-sm border border-green-100 rounded-3xl p-6 text-left shadow-sm">
+        <div class="text-3xl mb-3">🌱</div>
+        <h3 class="font-black text-gray-800 mb-1">Impacto Real</h3>
+        <p class="text-sm text-gray-500">Cada pedido apoia restaurantes locais e práticas sustentáveis.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
+      <a routerLink="/cadastro"
+        class="flex-1 bg-gradient-to-r from-green-500 to-teal-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-green-200 hover:shadow-green-300 hover:scale-[1.02] transition-all text-center uppercase tracking-wide text-sm">
+        Começar agora 🚀
+      </a>
+      <a routerLink="/login"
+        class="flex-1 bg-white border-2 border-green-200 text-green-700 font-black py-4 rounded-2xl hover:border-green-400 transition-all text-center uppercase tracking-wide text-sm">
+        Entrar
+      </a>
+    </div>
+
+    <p class="mt-6 text-xs text-gray-400">
+      Gratuito para clientes · Parceria para restaurantes · 100% sustentável
+    </p>
+
+  </main>
+
+</div>

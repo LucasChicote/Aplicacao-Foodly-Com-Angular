@@ -1,18 +1,36 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
-import { LucideAngularModule, Utensils, ShoppingBag, ShoppingCart, Plus, Trash2, Search, ArrowRight, LogOut, User, CheckCircle } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  
+  ArrowLeft, ArrowRight, ChevronRight, LogIn, LogOut, Menu,
+  
+  User, UserCircle, UserPlus, Shield, ShieldCheck, Lock, Mail, Eye, EyeOff,
+  
+  Leaf, Utensils, Store, ShoppingBag, ShoppingCart, Package, PackageCheck,
+  
+  Plus, PlusCircle, Trash2, RefreshCw, X, XCircle, CheckCircle, CheckCircle2,
+  
+  Clock, Flame, Bike, AlertCircle, Info, Search, Tag, Loader,
+  
+  LayoutDashboard, ClipboardList, Inbox, Users, MapPin
+} from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor])),
-    // A forma correta para Standalone é esta:
     importProvidersFrom(
-      LucideAngularModule.pick({ 
-        Utensils, ShoppingBag, ShoppingCart, Plus, Trash2, Search, ArrowRight, LogOut, User, CheckCircle 
+      LucideAngularModule.pick({
+        ArrowLeft, ArrowRight, ChevronRight, LogIn, LogOut, Menu,
+        User, UserCircle, UserPlus, Shield, ShieldCheck, Lock, Mail, Eye, EyeOff,
+        Leaf, Utensils, Store, ShoppingBag, ShoppingCart, Package, PackageCheck,
+        Plus, PlusCircle, Trash2, RefreshCw, X, XCircle, CheckCircle, CheckCircle2,
+        Clock, Flame, Bike, AlertCircle, Info, Search, Tag, Loader,
+        LayoutDashboard, ClipboardList, Inbox, Users, MapPin
       })
     )
   ]

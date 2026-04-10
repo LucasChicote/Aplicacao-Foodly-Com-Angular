@@ -1,51 +1,52 @@
-import { Component, inject } from '@angular/core'; 
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../service/api.service';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './login.html',
-  styleUrl: './login.css'
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, LucideAngularModule],
+  templateUrl: './login.html'
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
+  private fb     = inject(FormBuilder);
   private router = inject(Router);
-  private service: ApiService = inject(ApiService);
+  service        = inject(ApiService);
+
+  carregando  = false;
+  erroLogin   = '';
+  mostrarSenha = signal(false);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    senha: ['', [Validators.required]]
+    senha: ['', Validators.required]
   });
 
-  entrar() {
-    if (this.loginForm.valid) {
-      const dadosLogin = this.loginForm.value;
+  toggleSenha() { this.mostrarSenha.update(v => !v); }
 
-      this.service.login(dadosLogin).subscribe({
-        next: (res: any) => {
-          if (res?.token) {
-            localStorage.setItem('token', res.token);
-            this.router.navigate(['/home']);
-          } else {
-            console.error('Resposta do servidor sem token:', res);
-            alert('Erro: O servidor não enviou o token de acesso.');
-          }
-        },
-        error: (err: any) => {
-          console.error('Detalhes do erro:', err);
-          if (err.status === 403) {
-            alert('Acesso negado (403). Verifique suas credenciais ou a configuração de CORS no Back-end.');
-          } else {
-            alert('Erro ao logar! Verifique se o banco de dados e o Back-end estão rodando corretamente.');
-          }
-        }
-      });
-    } else {
-      alert('Por favor, preencha o formulário corretamente.');
-    }
+  entrar() {
+    if (this.loginForm.invalid) return;
+    this.carregando = true;
+    this.erroLogin  = '';
+
+    this.service.login(this.loginForm.value as any).subscribe({
+      next: (res: any) => {
+        this.carregando = false;
+        this.service.salvarSessao(res.token, res.nome, res.email, res.role);
+        
+        if (res.role === 'ROLE_ADMIN')            this.router.navigate(['/admin']);
+        else if (res.role === 'ROLE_RESTAURANT_OWNER') this.router.navigate(['/dashboard-owner']);
+        else                                           this.router.navigate(['/home']);
+      },
+      error: (err: any) => {
+        this.carregando = false;
+        this.erroLogin = (err.status === 401 || err.status === 403)
+          ? 'E-mail ou senha incorretos.'
+          : 'Erro ao conectar com o servidor.';
+      }
+    });
   }
 }
