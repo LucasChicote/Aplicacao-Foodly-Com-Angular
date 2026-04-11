@@ -3,18 +3,20 @@ import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 import { ownerGuard } from './guards/owner.guard';
 
-import { WelcomeComponent }        from './pages/Welcome/welcome';
-import { LoginComponent }           from './login/login';
-import { FormComponent }            from './form/form';
-import { HomeComponent }            from './home/home';
-import { PagamentoComponent }       from './pages/pagamento/pagamento';
-import { PerfilComponent }          from './pages/perfil/perfil';
-import { MeusPedidosComponent }     from './pages/pedidos/meus-pedidos';
-import { AdminComponent }           from './pages/admin/admin';
-import { DashboardOwnerComponent }  from './pages/restaurante/dashboard-owner';
+import { WelcomeComponent }           from './pages/Welcome/welcome';
+import { LoginComponent }              from './login/login';
+import { FormComponent }               from './form/form';
+import { HomeComponent }               from './home/home';
+import { PagamentoComponent }          from './pages/pagamento/pagamento';
+import { PerfilComponent }             from './pages/perfil/perfil';
+import { MeusPedidosComponent }        from './pages/pedidos/meus-pedidos';
+import { AdminComponent }              from './pages/admin/admin';
+import { DashboardOwnerComponent }     from './pages/restaurante/dashboard-owner';
+import { RestaurantesComponent }       from './pages/restaurantes/restaurantes';       
+import { RestauranteDetalheComponent } from './pages/restaurantes/restaurante-detalhe'; 
 
 export const routes: Routes = [
-  
+
   { path: '',        component: WelcomeComponent },
   { path: 'login',   component: LoginComponent },
   { path: 'cadastro', component: FormComponent },
@@ -24,8 +26,10 @@ export const routes: Routes = [
   { path: 'perfil',       component: PerfilComponent,       canActivate: [authGuard] },
   { path: 'meus-pedidos', component: MeusPedidosComponent,  canActivate: [authGuard] },
 
-  { path: 'admin',           component: AdminComponent,          canActivate: [authGuard, adminGuard] },
+  { path: 'restaurantes',        component: RestaurantesComponent,       canActivate: [authGuard] },
+  { path: 'restaurante/:id',     component: RestauranteDetalheComponent, canActivate: [authGuard] },
 
+  { path: 'admin',           component: AdminComponent,          canActivate: [authGuard, adminGuard] },
   { path: 'dashboard-owner', component: DashboardOwnerComponent, canActivate: [authGuard, ownerGuard] },
 
   { path: '**', redirectTo: '' }

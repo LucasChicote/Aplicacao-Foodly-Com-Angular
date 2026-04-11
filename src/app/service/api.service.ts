@@ -7,9 +7,9 @@ export class ApiService {
   private http = inject(HttpClient);
   private readonly URL = 'http://localhost:8080';
 
-  produtos    = signal<any[]>([]);
-  categorias  = signal<any[]>([]);
-  restaurantes = signal<any[]>([]);
+  produtos      = signal<any[]>([]);
+  categorias    = signal<any[]>([]);
+  restaurantes  = signal<any[]>([]);
   carrinhoItens = signal<any[]>([]);
 
   login(dados: { email: string; senha: string }): Observable<any> {
@@ -76,6 +76,10 @@ export class ApiService {
       .subscribe(res => this.produtos.set(res));
   }
 
+  listarProdutosPorRestauranteObs(restauranteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}/produtos/restaurante/${restauranteId}`);
+  }
+
   criarProduto(dados: {
     nome: string; descricao: string; preco: number;
     imagemUrl?: string; categoriaId: number; restauranteId: number;
@@ -125,10 +129,10 @@ export class ApiService {
     ['token','nome','email','role'].forEach(k => localStorage.removeItem(k));
   }
 
-  getNome():  string { return localStorage.getItem('nome')  ?? 'Usuário'; }
-  getEmail(): string { return localStorage.getItem('email') ?? ''; }
-  getRole():  string { return localStorage.getItem('role')  ?? ''; }
-  isAdmin():  boolean { return this.getRole() === 'ROLE_ADMIN'; }
-  isOwner():  boolean { return this.getRole() === 'ROLE_RESTAURANT_OWNER'; }
-  isCustomer(): boolean { return this.getRole() === 'ROLE_CUSTOMER'; }
+  getNome():     string  { return localStorage.getItem('nome')  ?? 'Usuário'; }
+  getEmail():    string  { return localStorage.getItem('email') ?? ''; }
+  getRole():     string  { return localStorage.getItem('role')  ?? ''; }
+  isAdmin():     boolean { return this.getRole() === 'ROLE_ADMIN'; }
+  isOwner():     boolean { return this.getRole() === 'ROLE_RESTAURANT_OWNER'; }
+  isCustomer():  boolean { return this.getRole() === 'ROLE_CUSTOMER'; }
 }

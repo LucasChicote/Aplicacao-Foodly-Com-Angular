@@ -21,6 +21,12 @@ import { LucideAngularModule } from 'lucide-angular';
         <div class="flex items-center gap-2">
 
           @if (service.isCustomer() || service.isAdmin()) {
+            <a routerLink="/restaurantes"
+              class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-teal-600 transition px-3 py-2 rounded-xl hover:bg-teal-50">
+              <lucide-icon name="store" class="w-4 h-4"></lucide-icon>
+              Restaurantes
+            </a>
+
             <a routerLink="/meus-pedidos"
               class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-green-600 transition px-3 py-2 rounded-xl hover:bg-green-50">
               <lucide-icon name="package" class="w-4 h-4"></lucide-icon>
@@ -67,7 +73,7 @@ export class HeaderComponent {
   irHome() {
     if (this.service.isAdmin()) this.router.navigate(['/admin']);
     else if (this.service.isOwner()) this.router.navigate(['/dashboard-owner']);
-    else this.router.navigate(['/home']);
+    else this.router.navigate(['/restaurantes']);
   }
 
   logout() {

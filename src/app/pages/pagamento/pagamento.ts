@@ -3,13 +3,12 @@ import { ApiService } from '../../service/api.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
 
 @Component({
   standalone: true,
-  imports: [CommonModule, HeaderComponent, ReactiveFormsModule],
+  imports: [CommonModule, HeaderComponent],
   template: `
     <app-header />
     <div class="min-h-screen bg-gradient-to-br from-green-50/50 via-white to-teal-50/30 flex items-start justify-center p-4 pt-8">
@@ -23,7 +22,9 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
             <p class="text-green-600 font-bold text-sm mb-8">🌱 Obrigado por escolher um delivery sustentável!</p>
             <div class="bg-green-50 rounded-2xl p-4 mb-8 text-left">
               <p class="text-xs font-bold text-green-700 uppercase tracking-widest mb-2">Pagamento via</p>
-              <p class="font-black text-gray-800">{{ metodoPagamento() === 'PIX' ? '💚 PIX' : metodoPagamento() === 'DEBITO' ? '💳 Cartão de Débito' : '💳 Cartão de Crédito' }}</p>
+              <p class="font-black text-gray-800">
+                {{ metodoPagamento() === 'PIX' ? '💚 PIX' : metodoPagamento() === 'DEBITO' ? '💳 Cartão de Débito' : '💳 Cartão de Crédito' }}
+              </p>
             </div>
             <button (click)="voltarHome()"
               class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white font-black py-4 rounded-2xl hover:from-green-600 hover:to-teal-600 transition shadow-lg shadow-green-200">
@@ -55,7 +56,6 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
               <h2 class="font-black text-gray-800 text-lg mb-4 flex items-center gap-2">💳 Forma de Pagamento</h2>
 
               <div class="space-y-3">
-
                 <button (click)="selecionarMetodo('PIX')"
                   class="w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all"
                   [class.border-green-400]="metodoPagamento() === 'PIX'"
@@ -67,9 +67,7 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
                     <p class="font-black text-gray-800">PIX</p>
                     <p class="text-xs text-gray-400">Pagamento instantâneo • Sem taxas</p>
                   </div>
-                  @if (metodoPagamento() === 'PIX') {
-                    <span class="ml-auto text-green-500 text-xl">✓</span>
-                  }
+                  @if (metodoPagamento() === 'PIX') { <span class="ml-auto text-green-500 text-xl">✓</span> }
                 </button>
 
                 <button (click)="selecionarMetodo('DEBITO')"
@@ -83,9 +81,7 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
                     <p class="font-black text-gray-800">Cartão de Débito</p>
                     <p class="text-xs text-gray-400">Débito direto na conta</p>
                   </div>
-                  @if (metodoPagamento() === 'DEBITO') {
-                    <span class="ml-auto text-green-500 text-xl">✓</span>
-                  }
+                  @if (metodoPagamento() === 'DEBITO') { <span class="ml-auto text-green-500 text-xl">✓</span> }
                 </button>
 
                 <button (click)="selecionarMetodo('CREDITO')"
@@ -99,14 +95,12 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
                     <p class="font-black text-gray-800">Cartão de Crédito</p>
                     <p class="text-xs text-gray-400">Parcelamento disponível</p>
                   </div>
-                  @if (metodoPagamento() === 'CREDITO') {
-                    <span class="ml-auto text-green-500 text-xl">✓</span>
-                  }
+                  @if (metodoPagamento() === 'CREDITO') { <span class="ml-auto text-green-500 text-xl">✓</span> }
                 </button>
               </div>
 
               @if (metodoPagamento() === 'DEBITO' || metodoPagamento() === 'CREDITO') {
-                <div class="mt-4 space-y-3 animate-pulse-once">
+                <div class="mt-4 space-y-3">
                   <div>
                     <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Número do Cartão</label>
                     <input type="text" placeholder="0000 0000 0000 0000" maxlength="19"
@@ -130,9 +124,7 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
               @if (metodoPagamento() === 'PIX') {
                 <div class="mt-4 bg-green-50 rounded-2xl p-5 text-center border border-green-100">
                   <p class="text-sm font-bold text-green-700 mb-3">Chave PIX do restaurante</p>
-                  <div class="w-24 h-24 bg-white rounded-2xl mx-auto flex items-center justify-center border border-green-200 text-5xl mb-3">
-                    📱
-                  </div>
+                  <div class="w-24 h-24 bg-white rounded-2xl mx-auto flex items-center justify-center border border-green-200 text-5xl mb-3">📱</div>
                   <p class="text-xs text-gray-400">Escaneie ou copie a chave PIX ao confirmar</p>
                 </div>
               }
@@ -162,12 +154,12 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
 })
 export class PagamentoComponent {
   service = inject(ApiService);
-  router = inject(Router);
+  router  = inject(Router);
 
-  enviando = signal(false);
-  erro = signal('');
+  enviando         = signal(false);
+  erro             = signal('');
   pedidoConfirmado = signal(false);
-  metodoPagamento = signal<MetodoPagamento>(null);
+  metodoPagamento  = signal<MetodoPagamento>(null);
 
   total = computed(() =>
     this.service.carrinhoItens().reduce((acc, item: any) => acc + item.preco, 0)
@@ -179,11 +171,16 @@ export class PagamentoComponent {
     if (!this.metodoPagamento()) return;
     const itens = this.service.carrinhoItens();
     if (itens.length === 0) return;
+    const restauranteId = itens[0]?.restauranteId;
 
-    const restauranteId = itens[0]?.restauranteId ?? 1;
+    if (!restauranteId) {
+      this.erro.set('Não foi possível identificar o restaurante. Volte e tente novamente.');
+      return;
+    }
+
     const payload = {
       restauranteId,
-      itens: itens.map(item => ({ produtoId: item.id, quantidade: 1 }))
+      itens: itens.map((item: any) => ({ produtoId: item.id, quantidade: 1 }))
     };
 
     this.enviando.set(true);
@@ -202,6 +199,6 @@ export class PagamentoComponent {
     });
   }
 
-  voltar() { this.router.navigate(['/home']); }
-  voltarHome() { this.router.navigate(['/home']); }
+  voltar()      { this.router.navigate(['/restaurantes']); }
+  voltarHome()  { this.router.navigate(['/restaurantes']); }
 }
