@@ -60,11 +60,35 @@ const STATUS_LABELS: Record<string, string> = {
                   }
                 </select>
               </div>
+
               <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">URL da Imagem (opcional)</label>
-                <input formControlName="imagemUrl" placeholder="https://..."
-                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-3.5 text-sm outline-none focus:ring-2 focus:ring-teal-400/20 focus:border-teal-300 transition text-gray-700">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">
+                  Imagem do Restaurante (opcional)
+                </label>
+                <div class="relative">
+      
+                  @if (previewRestaurante()) {
+                    <div class="mb-3 relative">
+                      <img [src]="previewRestaurante()" alt="Preview"
+                        class="w-full h-36 object-cover rounded-xl border border-teal-100">
+                      <button type="button" (click)="removerImagemRestaurante()"
+                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition">
+                        <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                      </button>
+                    </div>
+                  }
+
+                  <label class="flex items-center gap-3 cursor-pointer bg-teal-50 border-2 border-dashed border-teal-200 rounded-xl p-4 hover:bg-teal-100/50 hover:border-teal-300 transition">
+                    <lucide-icon name="image" class="w-5 h-5 text-teal-400 flex-none"></lucide-icon>
+                    <span class="text-sm text-teal-600 font-semibold">
+                      {{ previewRestaurante() ? 'Trocar imagem' : 'Selecionar imagem do computador' }}
+                    </span>
+                    <input type="file" accept="image/*" class="hidden"
+                      (change)="onImagemRestauranteChange($event)">
+                  </label>
+                </div>
               </div>
+
               @if (erroRestaurante()) {
                 <p class="text-red-400 text-xs">{{ erroRestaurante() }}</p>
               }
@@ -74,10 +98,15 @@ const STATUS_LABELS: Record<string, string> = {
                   Restaurante cadastrado!
                 </p>
               }
-              <button type="submit" [disabled]="restauranteForm.invalid"
+              <button type="submit" [disabled]="restauranteForm.invalid || carregandoRestaurante()"
                 class="w-full bg-gradient-to-r from-teal-500 to-green-500 text-white font-bold py-3.5 rounded-xl hover:from-teal-600 hover:to-green-600 transition disabled:from-gray-200 disabled:to-gray-200 flex items-center justify-center gap-2">
-                <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
-                Cadastrar Restaurante
+                @if (carregandoRestaurante()) {
+                  <lucide-icon name="loader" class="w-4 h-4 animate-spin"></lucide-icon>
+                  Salvando...
+                } @else {
+                  <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                  Cadastrar Restaurante
+                }
               </button>
             </form>
           </div>
@@ -125,21 +154,48 @@ const STATUS_LABELS: Record<string, string> = {
                   }
                 </select>
               </div>
+
               <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">URL da Imagem (opcional)</label>
-                <input formControlName="imagemUrl" placeholder="https://..."
-                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-3.5 text-sm outline-none focus:ring-2 focus:ring-green-400/20 focus:border-green-300 transition text-gray-700">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">
+                  Imagem do Produto (opcional)
+                </label>
+                <div class="relative">
+                  @if (previewProduto()) {
+                    <div class="mb-3 relative">
+                      <img [src]="previewProduto()" alt="Preview"
+                        class="w-full h-36 object-cover rounded-xl border border-green-100">
+                      <button type="button" (click)="removerImagemProduto()"
+                        class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition">
+                        <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
+                      </button>
+                    </div>
+                  }
+                  <label class="flex items-center gap-3 cursor-pointer bg-green-50 border-2 border-dashed border-green-200 rounded-xl p-4 hover:bg-green-100/50 hover:border-green-300 transition">
+                    <lucide-icon name="image" class="w-5 h-5 text-green-400 flex-none"></lucide-icon>
+                    <span class="text-sm text-green-600 font-semibold">
+                      {{ previewProduto() ? 'Trocar imagem' : 'Selecionar imagem do computador' }}
+                    </span>
+                    <input type="file" accept="image/*" class="hidden"
+                      (change)="onImagemProdutoChange($event)">
+                  </label>
+                </div>
               </div>
+
               @if (sucessoProduto()) {
                 <p class="text-green-600 text-xs font-bold flex items-center gap-1">
                   <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon>
                   Produto adicionado!
                 </p>
               }
-              <button type="submit" [disabled]="produtoForm.invalid"
+              <button type="submit" [disabled]="produtoForm.invalid || carregandoProduto()"
                 class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold py-3.5 rounded-xl hover:from-green-600 hover:to-teal-600 transition disabled:from-gray-200 disabled:to-gray-200 flex items-center justify-center gap-2">
-                <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
-                Adicionar Produto
+                @if (carregandoProduto()) {
+                  <lucide-icon name="loader" class="w-4 h-4 animate-spin"></lucide-icon>
+                  Salvando...
+                } @else {
+                  <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                  Adicionar Produto
+                }
               </button>
             </form>
           </div>
@@ -192,7 +248,7 @@ const STATUS_LABELS: Record<string, string> = {
                     <p class="font-black text-green-600 mt-1">{{ pedido.total | currency:'BRL' }}</p>
                   </div>
                 </div>
-                
+
                 <div class="bg-gray-50 rounded-xl p-3 mb-3 text-xs space-y-1">
                   @for (item of pedido.itens; track item.nomeProduto) {
                     <div class="flex justify-between text-gray-600">
@@ -202,22 +258,16 @@ const STATUS_LABELS: Record<string, string> = {
                   }
                 </div>
 
-                @if (pedido.status !== 'ENTREGUE' && pedido.status !== 'CANCELADO') {
-                  <div class="flex gap-2 flex-wrap">
-                    @for (s of getProximosStatus(pedido.status); track s) {
-                      <button (click)="atualizarStatus(pedido.id, s)"
-                        class="text-xs font-bold px-3 py-2 rounded-xl border-2 border-teal-200 text-teal-600 hover:bg-teal-50 transition flex items-center gap-1">
-                        <lucide-icon name="arrow-right" class="w-3.5 h-3.5"></lucide-icon>
-                        {{ getStatusLabel(s) }}
+                <div class="flex gap-2 flex-wrap">
+                  @for (status of statusOptions; track status) {
+                    @if (status !== pedido.status) {
+                      <button (click)="atualizarStatus(pedido.id, status)"
+                        class="text-xs font-bold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition">
+                        {{ getStatusLabel(status) }}
                       </button>
                     }
-                    <button (click)="atualizarStatus(pedido.id, 'CANCELADO')"
-                      class="text-xs font-bold px-3 py-2 rounded-xl border-2 border-red-100 text-red-400 hover:bg-red-50 transition flex items-center gap-1">
-                      <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
-                      Cancelar
-                    </button>
-                  </div>
-                }
+                  }
+                </div>
               </div>
             }
           </div>
@@ -228,88 +278,155 @@ const STATUS_LABELS: Record<string, string> = {
   `
 })
 export class DashboardOwnerComponent implements OnInit {
-  service = inject(ApiService);
-  private fb = inject(FormBuilder);
+  service        = inject(ApiService);
+  private fb     = inject(FormBuilder);
 
+  pedidos         = signal<any[]>([]);
   meusRestaurantes = signal<any[]>([]);
-  pedidos = signal<any[]>([]);
   erroRestaurante = signal('');
   sucessoRestaurante = signal(false);
-  sucessoProduto = signal(false);
+  sucessoProduto  = signal(false);
+  carregandoRestaurante = signal(false);
+  carregandoProduto = signal(false);
+
+  previewRestaurante = signal<string | null>(null);
+  previewProduto     = signal<string | null>(null);
+
+  private imagemBase64Restaurante: string | null = null;
+  private imagemBase64Produto: string | null = null;
+
+  statusOptions = STATUS_OPTIONS;
 
   restauranteForm = this.fb.group({
     nome:      ['', Validators.required],
-    descricao: ['', Validators.required],
+    descricao: [''],
     categoria: ['', Validators.required],
-    imagemUrl: ['']
   });
 
   produtoForm = this.fb.group({
     nome:          ['', Validators.required],
-    descricao:     ['', Validators.required],
+    descricao:     [''],
     preco:         [null, [Validators.required, Validators.min(0.01)]],
-    imagemUrl:     [''],
-    categoriaId:   [null, Validators.required],
-    restauranteId: [null, Validators.required]
+    categoriaId:   ['', Validators.required],
+    restauranteId: ['', Validators.required],
   });
 
   ngOnInit() {
     this.service.listarCategorias();
-    this.carregarMeusRestaurantes();
-  }
-
-  carregarMeusRestaurantes() {
-    this.service.meusRestaurantes().subscribe(res => {
-      this.meusRestaurantes.set(res);
-      if (res.length > 0) this.recarregarPedidos();
-    });
+    this.service.meusRestaurantes().subscribe(res => this.meusRestaurantes.set(res));
+    this.recarregarPedidos();
   }
 
   recarregarPedidos() {
-    const r = this.meusRestaurantes();
-    if (r.length === 0) return;
-    this.service.pedidosDoRestaurante(r[0].id).subscribe(res => this.pedidos.set(res));
+    this.meusRestaurantes().forEach(r => {
+      this.service.pedidosDoRestaurante(r.id).subscribe(res => {
+        this.pedidos.update(atual => {
+          const filtrado = atual.filter(p => p.restauranteId !== r.id);
+          return [...filtrado, ...res];
+        });
+      });
+    });
+  }
+
+  getStatusLabel(s: string): string { return STATUS_LABELS[s] ?? s; }
+
+  atualizarStatus(pedidoId: number, status: string) {
+    this.service.atualizarStatusPedido(pedidoId, status).subscribe(() => {
+      this.pedidos.update(lista =>
+        lista.map(p => p.id === pedidoId ? { ...p, status } : p)
+      );
+    });
+  }
+
+  onImagemRestauranteChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.lerArquivoComoBase64(file, (base64) => {
+      this.imagemBase64Restaurante = base64;
+      this.previewRestaurante.set(base64);
+    });
+  }
+
+  removerImagemRestaurante() {
+    this.imagemBase64Restaurante = null;
+    this.previewRestaurante.set(null);
+  }
+
+  onImagemProdutoChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.lerArquivoComoBase64(file, (base64) => {
+      this.imagemBase64Produto = base64;
+      this.previewProduto.set(base64);
+    });
+  }
+
+  removerImagemProduto() {
+    this.imagemBase64Produto = null;
+    this.previewProduto.set(null);
+  }
+
+  private lerArquivoComoBase64(file: File, callback: (base64: string) => void) {
+    const reader = new FileReader();
+    reader.onload = () => callback(reader.result as string);
+    reader.readAsDataURL(file);
   }
 
   criarRestaurante() {
     if (this.restauranteForm.invalid) return;
-    const val = this.restauranteForm.value;
-    this.service.criarRestaurante(val as any).subscribe({
-      next: () => {
-        this.restauranteForm.reset();
+    this.carregandoRestaurante.set(true);
+    this.erroRestaurante.set('');
+
+    const v = this.restauranteForm.value;
+    const dados = {
+      nome:      v.nome!,
+      descricao: v.descricao ?? '',
+      categoria: v.categoria!,
+      imagemUrl: this.imagemBase64Restaurante ?? undefined,
+    };
+
+    this.service.criarRestaurante(dados).subscribe({
+      next: (res) => {
+        this.carregandoRestaurante.set(false);
         this.sucessoRestaurante.set(true);
+        this.restauranteForm.reset();
+        this.removerImagemRestaurante();
+        this.meusRestaurantes.update(lista => [...lista, res]);
         setTimeout(() => this.sucessoRestaurante.set(false), 3000);
-        this.carregarMeusRestaurantes();
       },
-      error: (err) => this.erroRestaurante.set(err.error?.erro ?? 'Erro ao cadastrar.')
+      error: (err) => {
+        this.carregandoRestaurante.set(false);
+        this.erroRestaurante.set(err.error?.erro ?? 'Erro ao cadastrar restaurante.');
+      }
     });
   }
 
   criarProduto() {
     if (this.produtoForm.invalid) return;
-    const val = this.produtoForm.getRawValue();
-    this.service.criarProduto({
-      nome: val.nome!, descricao: val.descricao!, preco: Number(val.preco),
-      imagemUrl: val.imagemUrl || undefined,
-      categoriaId: Number(val.categoriaId), restauranteId: Number(val.restauranteId)
-    }).subscribe({
+    this.carregandoProduto.set(true);
+
+    const v = this.produtoForm.value;
+    const dados = {
+      nome:          v.nome!,
+      descricao:     v.descricao ?? '',
+      preco:         Number(v.preco),
+      categoriaId:   Number(v.categoriaId),
+      restauranteId: Number(v.restauranteId),
+      imagemUrl:     this.imagemBase64Produto ?? undefined,
+    };
+
+    this.service.criarProduto(dados).subscribe({
       next: () => {
-        this.produtoForm.reset();
+        this.carregandoProduto.set(false);
         this.sucessoProduto.set(true);
+        this.produtoForm.reset();
+        this.removerImagemProduto();
+        this.service.listarProdutos();
         setTimeout(() => this.sucessoProduto.set(false), 3000);
+      },
+      error: () => {
+        this.carregandoProduto.set(false);
       }
     });
-  }
-
-  atualizarStatus(pedidoId: number, status: string) {
-    this.service.atualizarStatusPedido(pedidoId, status).subscribe(() => this.recarregarPedidos());
-  }
-
-  getStatusLabel(s: string): string { return STATUS_LABELS[s] ?? s; }
-
-  getProximosStatus(atual: string): string[] {
-    const ordem = ['PENDENTE','CONFIRMADO','EM_PREPARO','SAIU_PARA_ENTREGA','ENTREGUE'];
-    const idx = ordem.indexOf(atual);
-    return idx >= 0 && idx < ordem.length - 1 ? [ordem[idx + 1]] : [];
   }
 }
