@@ -1,9 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import { HeaderComponent } from '../../components/header/header';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+
+type FiltroRole = 'TODOS' | 'ROLE_CUSTOMER' | 'ROLE_RESTAURANT_OWNER' | 'ROLE_ADMIN';
 
 @Component({
   selector: 'app-admin',
@@ -29,61 +31,129 @@ import { LucideAngularModule } from 'lucide-angular';
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center justify-between mb-2">
               <lucide-icon name="users" class="w-5 h-5 text-green-500"></lucide-icon>
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Usuários</span>
+              <span class="text-xs font-bold text-gray-400 uppercase">Total</span>
             </div>
             <p class="text-2xl font-black text-gray-800">{{ usuarios().length }}</p>
+            <p class="text-xs text-gray-400 mt-0.5">usuários</p>
           </div>
           <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <lucide-icon name="tag" class="w-5 h-5 text-teal-500"></lucide-icon>
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Categorias</span>
+            <div class="flex items-center justify-between mb-2">
+              <lucide-icon name="user" class="w-5 h-5 text-green-500"></lucide-icon>
+              <span class="text-xs font-bold text-gray-400 uppercase">Clientes</span>
             </div>
-            <p class="text-2xl font-black text-gray-800">{{ service.categorias().length }}</p>
+            <p class="text-2xl font-black text-gray-800">{{ contarRole('ROLE_CUSTOMER') }}</p>
           </div>
           <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <lucide-icon name="store" class="w-5 h-5 text-blue-500"></lucide-icon>
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Restaurantes</span>
+            <div class="flex items-center justify-between mb-2">
+              <lucide-icon name="store" class="w-5 h-5 text-teal-500"></lucide-icon>
+              <span class="text-xs font-bold text-gray-400 uppercase">Restaurantes</span>
             </div>
-            <p class="text-2xl font-black text-gray-800">{{ service.restaurantes().length }}</p>
+            <p class="text-2xl font-black text-gray-800">{{ contarRole('ROLE_RESTAURANT_OWNER') }}</p>
           </div>
           <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <lucide-icon name="utensils" class="w-5 h-5 text-orange-400"></lucide-icon>
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Produtos</span>
+            <div class="flex items-center justify-between mb-2">
+              <lucide-icon name="shield" class="w-5 h-5 text-gray-500"></lucide-icon>
+              <span class="text-xs font-bold text-gray-400 uppercase">Admins</span>
             </div>
-            <p class="text-2xl font-black text-gray-800">{{ service.produtos().length }}</p>
+            <p class="text-2xl font-black text-gray-800">{{ contarRole('ROLE_ADMIN') }}</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-gray-50 flex items-center justify-between">
-              <h2 class="font-black text-gray-800 flex items-center gap-2">
-                <lucide-icon name="users" class="w-5 h-5 text-green-500"></lucide-icon>
-                Usuários Cadastrados
-              </h2>
-              <button (click)="recarregarUsuarios()"
-                class="text-gray-400 hover:text-green-500 transition">
-                <lucide-icon name="refresh-cw" class="w-4 h-4"></lucide-icon>
-              </button>
+          <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+            <div class="p-5 border-b border-gray-50">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="font-black text-gray-800 flex items-center gap-2">
+                  <lucide-icon name="users" class="w-5 h-5 text-green-500"></lucide-icon>
+                  Usuários Cadastrados
+                </h2>
+                <button (click)="recarregarUsuarios()"
+                  class="p-2 rounded-xl text-gray-400 hover:text-green-500 hover:bg-green-50 transition">
+                  <lucide-icon name="refresh-cw" class="w-4 h-4"></lucide-icon>
+                </button>
+              </div>
+
+              <div class="flex gap-2 flex-wrap">
+
+                <button (click)="filtroAtivo.set('TODOS')"
+                  class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black border-2 transition-all"
+                  [class.bg-gray-800]="filtroAtivo() === 'TODOS'"
+                  [class.text-white]="filtroAtivo() === 'TODOS'"
+                  [class.border-gray-800]="filtroAtivo() === 'TODOS'"
+                  [class.bg-white]="filtroAtivo() !== 'TODOS'"
+                  [class.text-gray-500]="filtroAtivo() !== 'TODOS'"
+                  [class.border-gray-100]="filtroAtivo() !== 'TODOS'"
+                  [class.hover:border-gray-300]="filtroAtivo() !== 'TODOS'">
+                  <lucide-icon name="users" class="w-3.5 h-3.5"></lucide-icon>
+                  Todos ({{ usuarios().length }})
+                </button>
+
+                <button (click)="filtroAtivo.set('ROLE_CUSTOMER')"
+                  class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black border-2 transition-all"
+                  [class.bg-green-500]="filtroAtivo() === 'ROLE_CUSTOMER'"
+                  [class.text-white]="filtroAtivo() === 'ROLE_CUSTOMER'"
+                  [class.border-green-500]="filtroAtivo() === 'ROLE_CUSTOMER'"
+                  [class.bg-white]="filtroAtivo() !== 'ROLE_CUSTOMER'"
+                  [class.text-gray-500]="filtroAtivo() !== 'ROLE_CUSTOMER'"
+                  [class.border-gray-100]="filtroAtivo() !== 'ROLE_CUSTOMER'"
+                  [class.hover:border-green-300]="filtroAtivo() !== 'ROLE_CUSTOMER'">
+                  <lucide-icon name="user" class="w-3.5 h-3.5"></lucide-icon>
+                  Clientes ({{ contarRole('ROLE_CUSTOMER') }})
+                </button>
+
+                <button (click)="filtroAtivo.set('ROLE_RESTAURANT_OWNER')"
+                  class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black border-2 transition-all"
+                  [class.bg-teal-500]="filtroAtivo() === 'ROLE_RESTAURANT_OWNER'"
+                  [class.text-white]="filtroAtivo() === 'ROLE_RESTAURANT_OWNER'"
+                  [class.border-teal-500]="filtroAtivo() === 'ROLE_RESTAURANT_OWNER'"
+                  [class.bg-white]="filtroAtivo() !== 'ROLE_RESTAURANT_OWNER'"
+                  [class.text-gray-500]="filtroAtivo() !== 'ROLE_RESTAURANT_OWNER'"
+                  [class.border-gray-100]="filtroAtivo() !== 'ROLE_RESTAURANT_OWNER'"
+                  [class.hover:border-teal-300]="filtroAtivo() !== 'ROLE_RESTAURANT_OWNER'">
+                  <lucide-icon name="store" class="w-3.5 h-3.5"></lucide-icon>
+                  Restaurantes ({{ contarRole('ROLE_RESTAURANT_OWNER') }})
+                </button>
+
+                <button (click)="filtroAtivo.set('ROLE_ADMIN')"
+                  class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black border-2 transition-all"
+                  [class.bg-gray-700]="filtroAtivo() === 'ROLE_ADMIN'"
+                  [class.text-white]="filtroAtivo() === 'ROLE_ADMIN'"
+                  [class.border-gray-700]="filtroAtivo() === 'ROLE_ADMIN'"
+                  [class.bg-white]="filtroAtivo() !== 'ROLE_ADMIN'"
+                  [class.text-gray-500]="filtroAtivo() !== 'ROLE_ADMIN'"
+                  [class.border-gray-100]="filtroAtivo() !== 'ROLE_ADMIN'"
+                  [class.hover:border-gray-400]="filtroAtivo() !== 'ROLE_ADMIN'">
+                  <lucide-icon name="shield" class="w-3.5 h-3.5"></lucide-icon>
+                  Admins ({{ contarRole('ROLE_ADMIN') }})
+                </button>
+
+              </div>
             </div>
-            <div class="divide-y divide-gray-50 max-h-80 overflow-y-auto">
-              @for (u of usuarios(); track u.id) {
-                <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition">
+
+            <div class="divide-y divide-gray-50 max-h-[420px] overflow-y-auto">
+              @if (usuariosFiltrados().length === 0) {
+                <div class="text-center py-12 text-gray-300">
+                  <lucide-icon name="users" class="w-8 h-8 mx-auto mb-2"></lucide-icon>
+                  <p class="text-sm font-bold">Nenhum usuário nesta categoria</p>
+                </div>
+              }
+
+              @for (u of usuariosFiltrados(); track u.id) {
+                <div class="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50/80 transition group">
                   <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl flex items-center justify-center"
-                         [class.bg-green-100]="u.role === 'ROLE_CUSTOMER'"
-                         [class.bg-teal-100]="u.role === 'ROLE_RESTAURANT_OWNER'"
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-none"
+                         [class.bg-green-50]="u.role === 'ROLE_CUSTOMER'"
+                         [class.bg-teal-50]="u.role === 'ROLE_RESTAURANT_OWNER'"
                          [class.bg-gray-100]="u.role === 'ROLE_ADMIN'">
                       <lucide-icon
                         [name]="u.role === 'ROLE_ADMIN' ? 'shield' : u.role === 'ROLE_RESTAURANT_OWNER' ? 'store' : 'user'"
                         class="w-4 h-4"
-                        [class.text-green-600]="u.role === 'ROLE_CUSTOMER'"
-                        [class.text-teal-600]="u.role === 'ROLE_RESTAURANT_OWNER'"
+                        [class.text-green-500]="u.role === 'ROLE_CUSTOMER'"
+                        [class.text-teal-500]="u.role === 'ROLE_RESTAURANT_OWNER'"
                         [class.text-gray-500]="u.role === 'ROLE_ADMIN'">
                       </lucide-icon>
                     </div>
@@ -92,18 +162,20 @@ import { LucideAngularModule } from 'lucide-angular';
                       <p class="text-xs text-gray-400">{{ u.email }}</p>
                     </div>
                   </div>
+
                   <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full"
+                    <span class="hidden sm:inline text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
                           [class.bg-green-50]="u.role === 'ROLE_CUSTOMER'"
                           [class.text-green-600]="u.role === 'ROLE_CUSTOMER'"
                           [class.bg-teal-50]="u.role === 'ROLE_RESTAURANT_OWNER'"
                           [class.text-teal-600]="u.role === 'ROLE_RESTAURANT_OWNER'"
-                          [class.bg-gray-50]="u.role === 'ROLE_ADMIN'"
+                          [class.bg-gray-100]="u.role === 'ROLE_ADMIN'"
                           [class.text-gray-500]="u.role === 'ROLE_ADMIN'">
                       {{ getRoleLabel(u.role) }}
                     </span>
-                    <button (click)="deletarUsuario(u.id)"
-                      class="text-gray-300 hover:text-red-400 transition p-1 rounded-lg hover:bg-red-50">
+                    
+                    <button (click)="deletarUsuario(u.id, u.nome)"
+                      class="p-1.5 rounded-lg text-gray-200 hover:text-red-400 hover:bg-red-50 transition opacity-0 group-hover:opacity-100">
                       <lucide-icon name="trash-2" class="w-4 h-4"></lucide-icon>
                     </button>
                   </div>
@@ -118,22 +190,20 @@ import { LucideAngularModule } from 'lucide-angular';
                 <lucide-icon name="tag" class="w-5 h-5 text-teal-500"></lucide-icon>
                 Categorias
               </h2>
-              
               <form [formGroup]="categoriaForm" (ngSubmit)="criarCategoria()" class="flex gap-2">
                 <input formControlName="nome" placeholder="Nova categoria..."
-                  class="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-400/20 focus:border-green-300 transition text-gray-700">
+                  class="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-400/20 focus:border-green-300 transition text-gray-700 min-w-0">
                 <button type="submit" [disabled]="categoriaForm.invalid"
-                  class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:from-green-600 hover:to-teal-600 transition disabled:from-gray-200 disabled:to-gray-200 flex items-center gap-1">
+                  class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-3 py-2.5 rounded-xl font-bold text-sm hover:from-green-600 hover:to-teal-600 transition disabled:from-gray-200 disabled:to-gray-200 flex-none">
                   <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
-                  Add
                 </button>
               </form>
             </div>
-            <div class="p-4 flex flex-wrap gap-2 max-h-64 overflow-y-auto">
+            <div class="p-4 flex flex-wrap gap-2 max-h-80 overflow-y-auto">
               @for (c of service.categorias(); track c.id) {
-                <div class="flex items-center gap-2 bg-teal-50 border border-teal-100 text-teal-700 text-sm font-bold px-3 py-2 rounded-xl">
-                  <lucide-icon name="tag" class="w-3.5 h-3.5"></lucide-icon>
-                  {{ c.nome }}
+                <div class="flex items-center gap-1.5 bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold px-3 py-2 rounded-xl">
+                  <lucide-icon name="tag" class="w-3 h-3 flex-none"></lucide-icon>
+                  <span>{{ c.nome }}</span>
                   <button (click)="deletarCategoria(c.id)"
                     class="text-teal-300 hover:text-red-400 transition ml-1">
                     <lucide-icon name="x" class="w-3.5 h-3.5"></lucide-icon>
@@ -146,16 +216,28 @@ import { LucideAngularModule } from 'lucide-angular';
         </div>
       </div>
     </div>
+
+    @if (toastMsg()) {
+      <div class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm font-bold px-6 py-3 rounded-2xl shadow-xl flex items-center gap-2 z-50 animate-bounce-once">
+        <lucide-icon name="check-circle" class="w-4 h-4 text-green-400"></lucide-icon>
+        {{ toastMsg() }}
+      </div>
+    }
   `
 })
 export class AdminComponent implements OnInit {
   service = inject(ApiService);
   private fb = inject(FormBuilder);
 
-  usuarios = signal<any[]>([]);
+  usuarios    = signal<any[]>([]);
+  filtroAtivo = signal<FiltroRole>('TODOS');
+  toastMsg    = signal('');
 
-  categoriaForm = this.fb.group({
-    nome: ['', Validators.required]
+  categoriaForm = this.fb.group({ nome: ['', Validators.required] });
+
+  usuariosFiltrados = computed(() => {
+    const f = this.filtroAtivo();
+    return f === 'TODOS' ? this.usuarios() : this.usuarios().filter(u => u.role === f);
   });
 
   ngOnInit() {
@@ -169,28 +251,46 @@ export class AdminComponent implements OnInit {
     this.service.listarUsuarios().subscribe(res => this.usuarios.set(res));
   }
 
+  contarRole(role: string): number {
+    return this.usuarios().filter(u => u.role === role).length;
+  }
+
   getRoleLabel(role: string): string {
     if (role === 'ROLE_ADMIN') return 'Admin';
     if (role === 'ROLE_RESTAURANT_OWNER') return 'Restaurante';
     return 'Cliente';
   }
 
-  deletarUsuario(id: number) {
-    if (!confirm('Remover este usuário?')) return;
-    this.service.deletarUsuario(id).subscribe(() => this.recarregarUsuarios());
+  deletarUsuario(id: number, nome: string) {
+    if (!confirm(`Remover o usuário "${nome}"?\nEsta ação não pode ser desfeita.`)) return;
+    this.service.deletarUsuario(id).subscribe({
+      next: () => {
+        this.recarregarUsuarios();
+        this.toast(`Usuário "${nome}" removido.`);
+      },
+      error: () => this.toast('Erro ao remover usuário.')
+    });
   }
 
   criarCategoria() {
-    if (this.categoriaForm.invalid) return;
     const { nome } = this.categoriaForm.value;
     this.service.criarCategoria({ nome: nome! }).subscribe(() => {
       this.categoriaForm.reset();
       this.service.listarCategorias();
+      this.toast(`Categoria "${nome}" criada!`);
     });
   }
 
   deletarCategoria(id: number) {
     if (!confirm('Remover esta categoria?')) return;
-    this.service.deletarCategoria(id).subscribe(() => this.service.listarCategorias());
+    this.service.deletarCategoria(id).subscribe(() => {
+      this.service.listarCategorias();
+      this.toast('Categoria removida.');
+    });
+  }
+
+  private toast(msg: string) {
+    this.toastMsg.set(msg);
+    setTimeout(() => this.toastMsg.set(''), 3000);
   }
 }
