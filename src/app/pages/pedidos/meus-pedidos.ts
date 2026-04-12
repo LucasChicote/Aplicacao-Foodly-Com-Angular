@@ -91,7 +91,7 @@ const STEPS = ['PENDENTE','CONFIRMADO','EM_PREPARO','SAIU_PARA_ENTREGA','ENTREGU
                   <div class="flex items-center gap-1">
                     @for (step of STEPS; track step; let i = $index) {
                       <div class="flex items-center flex-1">
-                        <!-- Círculo -->
+                      
                         <div class="w-8 h-8 rounded-full flex items-center justify-center flex-none transition-all"
                              [class.bg-green-500]="getInfo(pedido.status).step > i"
                              [class.bg-green-100]="getInfo(pedido.status).step === i + 1"
