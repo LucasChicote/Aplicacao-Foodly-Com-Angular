@@ -14,9 +14,9 @@ import { AdminComponent }              from './pages/admin/admin';
 import { DashboardOwnerComponent }     from './pages/restaurante/dashboard-owner';
 import { RestaurantesComponent }       from './pages/restaurantes/restaurantes';       
 import { RestauranteDetalheComponent } from './pages/restaurantes/restaurante-detalhe'; 
+import { KitsComponent }               from './pages/kits/kits.component';
 
 export const routes: Routes = [
-
   { path: '',        component: WelcomeComponent },
   { path: 'login',   component: LoginComponent },
   { path: 'cadastro', component: FormComponent },
@@ -28,6 +28,7 @@ export const routes: Routes = [
 
   { path: 'restaurantes',        component: RestaurantesComponent,       canActivate: [authGuard] },
   { path: 'restaurante/:id',     component: RestauranteDetalheComponent, canActivate: [authGuard] },
+  { path: 'kits',                component: KitsComponent,               canActivate: [authGuard] },
 
   { path: 'admin',           component: AdminComponent,          canActivate: [authGuard, adminGuard] },
   { path: 'dashboard-owner', component: DashboardOwnerComponent, canActivate: [authGuard, ownerGuard] },
