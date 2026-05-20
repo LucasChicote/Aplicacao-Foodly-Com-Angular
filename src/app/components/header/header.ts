@@ -8,35 +8,35 @@ import { LucideAngularModule } from 'lucide-angular';
   standalone: true,
   imports: [RouterLink, LucideAngularModule],
   template: `
-    <header class="bg-white/90 backdrop-blur-md border-b border-green-100 sticky top-0 z-50 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
 
-        <div class="flex items-center gap-3 cursor-pointer" (click)="irHome()">
-          <div class="w-9 h-9 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center shadow-md shadow-green-200">
-            <lucide-icon name="leaf" class="w-5 h-5 text-white"></lucide-icon>
+        <div class="flex items-center gap-2 cursor-pointer" (click)="irHome()">
+          <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+            <lucide-icon name="utensils" class="w-4 h-4 text-white"></lucide-icon>
           </div>
-          <span class="text-xl font-black text-gray-900 tracking-tight italic">Foodly</span>
+          <span class="text-lg font-black text-gray-900 tracking-tight">Foodly</span>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
 
           @if (service.isCustomer() || service.isAdmin()) {
             <a routerLink="/restaurantes"
-              class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-teal-600 transition px-3 py-2 rounded-xl hover:bg-teal-50">
+              class="hidden md:flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
               <lucide-icon name="store" class="w-4 h-4"></lucide-icon>
               Restaurantes
             </a>
 
             <a routerLink="/meus-pedidos"
-              class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-green-600 transition px-3 py-2 rounded-xl hover:bg-green-50">
+              class="hidden md:flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
               <lucide-icon name="package" class="w-4 h-4"></lucide-icon>
-              Meus Pedidos
+              Pedidos
             </a>
           }
 
           @if (service.isOwner()) {
             <a routerLink="/dashboard-owner"
-              class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-teal-600 transition px-3 py-2 rounded-xl hover:bg-teal-50">
+              class="hidden md:flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
               <lucide-icon name="layout-dashboard" class="w-4 h-4"></lucide-icon>
               Meu Painel
             </a>
@@ -44,20 +44,20 @@ import { LucideAngularModule } from 'lucide-angular';
 
           @if (service.isAdmin()) {
             <a routerLink="/admin"
-              class="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-700 transition px-3 py-2 rounded-xl hover:bg-gray-50">
+              class="hidden md:flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 transition px-3 py-1.5 rounded-lg hover:bg-gray-100">
               <lucide-icon name="shield" class="w-4 h-4"></lucide-icon>
               Admin
             </a>
           }
 
           <a routerLink="/perfil"
-            class="flex items-center gap-2 bg-green-50 border border-green-100 px-3 py-2 rounded-full text-sm font-bold text-green-700 hover:bg-green-100 transition">
-            <lucide-icon name="user-circle" class="w-4 h-4"></lucide-icon>
-            <span class="hidden sm:inline max-w-[120px] truncate">{{ service.getNome().split(' ')[0] }}</span>
+            class="flex items-center gap-1.5 border border-gray-200 px-3 py-1.5 rounded-full text-sm font-semibold text-gray-700 hover:bg-gray-50 transition ml-1">
+            <lucide-icon name="user" class="w-4 h-4"></lucide-icon>
+            <span class="hidden sm:inline max-w-[100px] truncate">{{ service.getNome().split(' ')[0] }}</span>
           </a>
 
           <button (click)="logout()"
-            class="flex items-center gap-2 bg-gray-50 border border-gray-100 px-3 py-2 rounded-full text-sm font-bold text-gray-500 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition">
+            class="flex items-center gap-1.5 border border-gray-200 px-3 py-1.5 rounded-full text-sm font-semibold text-gray-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition ml-1">
             <lucide-icon name="log-out" class="w-4 h-4"></lucide-icon>
           </button>
         </div>

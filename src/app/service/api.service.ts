@@ -28,7 +28,7 @@ export class ApiService {
   }
 
   listarCategorias() {
-    this.http.get<any[]>(`${this.URL}/categorias`)
+    this.http.get<any[]>(`${this.URL}/categorias/produto`)
       .subscribe(res => this.categorias.set(res));
   }
 
@@ -82,7 +82,7 @@ export class ApiService {
 
   criarProduto(dados: {
     nome: string; descricao: string; preco: number;
-    imagemUrl?: string; categoriaId: number; restauranteId: number;
+    imagemUrl?: string; categoriaId?: number; categoriaNome?: string; restauranteId: number;
   }): Observable<any> {
     return this.http.post(`${this.URL}/produtos`, dados);
   }

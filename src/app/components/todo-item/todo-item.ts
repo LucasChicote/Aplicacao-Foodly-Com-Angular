@@ -1,41 +1,42 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-todo-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   template: `
-    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
 
-      <div class="w-full h-44 bg-gradient-to-br from-green-50 to-teal-50 overflow-hidden flex items-center justify-center relative">
+      <div class="w-full h-40 bg-gray-100 overflow-hidden flex items-center justify-center relative">
         @if (item().imagemUrl) {
           <img [src]="item().imagemUrl" [alt]="item().nome"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+               class="w-full h-full object-cover">
         } @else {
-          <span class="text-6xl opacity-60">🍽️</span>
+          <lucide-icon name="utensils" class="w-10 h-10 text-gray-300"></lucide-icon>
         }
         @if (item().restaurante) {
-          <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-xs font-bold text-green-700 px-3 py-1 rounded-full border border-green-100">
-            🏪 {{ item().restaurante }}
+          <div class="absolute top-2 left-2 bg-white text-xs font-semibold text-gray-700 px-2.5 py-1 rounded-full border border-gray-100 shadow-sm">
+            {{ item().restaurante }}
           </div>
         }
       </div>
 
-      <div class="p-5">
+      <div class="p-4">
         @if (item().categoria) {
-          <span class="text-[10px] font-black text-teal-500 uppercase tracking-widest">{{ item().categoria }}</span>
+          <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">{{ item().categoria }}</span>
         }
-        <h3 class="font-black text-gray-800 text-base mt-1 leading-tight">{{ item().nome }}</h3>
+        <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight">{{ item().nome }}</h3>
         <p class="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-          {{ item().descricao || 'Ingredientes selecionados com cuidado e qualidade.' }}
+          {{ item().descricao || 'Ingredientes selecionados com cuidado.' }}
         </p>
 
-        <div class="flex items-center justify-between mt-4">
-          <span class="font-black text-xl text-green-600">{{ item().preco | currency:'BRL' }}</span>
+        <div class="flex items-center justify-between mt-3">
+          <span class="font-black text-lg text-gray-900">{{ item().preco | currency:'BRL' }}</span>
           <button (click)="adicionar.emit(item())"
-            class="bg-gradient-to-r from-green-500 to-teal-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:from-green-600 hover:to-teal-600 shadow-md shadow-green-200 active:scale-90 transition-all text-xl font-bold">
-            +
+            class="bg-red-500 text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-red-600 active:scale-90 transition-all">
+            <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
           </button>
         </div>
       </div>
