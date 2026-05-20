@@ -16,160 +16,107 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
       <div class="w-full max-w-lg">
 
         @if (pedidoConfirmado()) {
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <lucide-icon name="check-circle" class="w-10 h-10 text-green-600"></lucide-icon>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 text-center">
+            <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <lucide-icon name="check-circle" class="w-10 h-10 text-emerald-600"></lucide-icon>
             </div>
-            <h2 class="text-xl font-black text-gray-900 mb-2">Pedido Confirmado!</h2>
-            <p class="text-gray-400 text-sm mb-2">Seu pedido foi enviado ao restaurante.</p>
-            <p class="text-gray-500 text-sm mb-8">Obrigado por escolher o Foodly.</p>
-            <div class="bg-gray-50 rounded-xl p-4 mb-8 text-left">
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Pagamento via</p>
-              <p class="font-bold text-gray-800">
-                {{ metodoPagamento() === 'PIX' ? 'PIX' : metodoPagamento() === 'DEBITO' ? 'Cartão de Débito' : 'Cartão de Crédito' }}
+            <h2 class="text-2xl font-black text-gray-900 mb-2">Pedido Confirmado!</h2>
+            <p class="text-gray-500 mb-8">Obrigado por escolher o Foodly e ajudar o planeta 🌍</p>
+
+            <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 mb-8 text-left">
+              <p class="text-emerald-700 font-semibold flex items-center gap-2">
+                <lucide-icon name="leaf" class="w-5 h-5"></lucide-icon>
+                Impacto da sua compra
               </p>
+              <p class="text-3xl font-black text-emerald-600 mt-2">
+                {{ co2Economizado() }} kg de CO₂ evitados
+              </p>
+              <p class="text-sm text-emerald-600 mt-1">Você contribuiu para um futuro mais sustentável.</p>
             </div>
+
             <button (click)="voltarHome()"
-              class="w-full bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition">
-              Voltar ao início
+              class="w-full bg-emerald-600 text-white font-bold py-4 rounded-2xl hover:bg-emerald-700 transition">
+              Voltar ao Início
             </button>
           </div>
         }
 
         @if (!pedidoConfirmado()) {
-          <div class="space-y-4">
+          <div class="space-y-6">
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h2 class="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
-                <lucide-icon name="shopping-bag" class="w-5 h-5 text-gray-500"></lucide-icon>
-                Resumo do pedido
-              </h2>
-              <div class="space-y-2 max-h-48 overflow-y-auto">
+            <!-- Resumo -->
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+              <h2 class="font-bold text-lg mb-4">Resumo do Pedido</h2>
+              <div class="space-y-3 max-h-52 overflow-y-auto">
                 @for (item of service.carrinhoItens(); track $index) {
-                  <div class="flex justify-between text-sm py-1">
+                  <div class="flex justify-between">
                     <span class="text-gray-600">{{ item.nome }}</span>
-                    <span class="font-bold text-gray-800">{{ item.preco | currency:'BRL' }}</span>
+                    <span class="font-medium">{{ (item.precoPromocional || item.preco) | currency:'BRL' }}</span>
                   </div>
                 }
               </div>
-              <div class="border-t border-gray-100 mt-4 pt-4 flex justify-between">
-                <span class="font-bold text-gray-900">Total</span>
-                <span class="font-black text-gray-900 text-lg">{{ total() | currency:'BRL' }}</span>
+              <div class="border-t border-gray-100 mt-5 pt-5 flex justify-between text-lg font-bold">
+                <span>Total</span>
+                <span>{{ total() | currency:'BRL' }}</span>
               </div>
             </div>
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <h2 class="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
-                <lucide-icon name="credit-card" class="w-5 h-5 text-gray-500"></lucide-icon>
-                Forma de Pagamento
-              </h2>
-
-              <div class="space-y-2">
-                <button (click)="selecionarMetodo('PIX')"
-                  class="w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all"
-                  [class.border-red-400]="metodoPagamento() === 'PIX'"
-                  [class.bg-red-50]="metodoPagamento() === 'PIX'"
-                  [class.border-gray-200]="metodoPagamento() !== 'PIX'"
-                  [class.bg-white]="metodoPagamento() !== 'PIX'">
-                  <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                    <lucide-icon name="zap" class="w-5 h-5 text-green-600"></lucide-icon>
-                  </div>
-                  <div class="text-left flex-1">
-                    <p class="font-bold text-gray-900 text-sm">PIX</p>
-                    <p class="text-xs text-gray-400">Pagamento instantâneo</p>
-                  </div>
-                  @if (metodoPagamento() === 'PIX') {
-                    <lucide-icon name="check-circle" class="w-5 h-5 text-red-500"></lucide-icon>
-                  }
-                </button>
-
-                <button (click)="selecionarMetodo('DEBITO')"
-                  class="w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all"
-                  [class.border-red-400]="metodoPagamento() === 'DEBITO'"
-                  [class.bg-red-50]="metodoPagamento() === 'DEBITO'"
-                  [class.border-gray-200]="metodoPagamento() !== 'DEBITO'"
-                  [class.bg-white]="metodoPagamento() !== 'DEBITO'">
-                  <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
-                    <lucide-icon name="credit-card" class="w-5 h-5 text-blue-500"></lucide-icon>
-                  </div>
-                  <div class="text-left flex-1">
-                    <p class="font-bold text-gray-900 text-sm">Cartão de Débito</p>
-                    <p class="text-xs text-gray-400">Débito direto na conta</p>
-                  </div>
-                  @if (metodoPagamento() === 'DEBITO') {
-                    <lucide-icon name="check-circle" class="w-5 h-5 text-red-500"></lucide-icon>
-                  }
-                </button>
-
-                <button (click)="selecionarMetodo('CREDITO')"
-                  class="w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all"
-                  [class.border-red-400]="metodoPagamento() === 'CREDITO'"
-                  [class.bg-red-50]="metodoPagamento() === 'CREDITO'"
-                  [class.border-gray-200]="metodoPagamento() !== 'CREDITO'"
-                  [class.bg-white]="metodoPagamento() !== 'CREDITO'">
-                  <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
-                    <lucide-icon name="wallet" class="w-5 h-5 text-purple-500"></lucide-icon>
-                  </div>
-                  <div class="text-left flex-1">
-                    <p class="font-bold text-gray-900 text-sm">Cartão de Crédito</p>
-                    <p class="text-xs text-gray-400">Parcelamento disponível</p>
-                  </div>
-                  @if (metodoPagamento() === 'CREDITO') {
-                    <lucide-icon name="check-circle" class="w-5 h-5 text-red-500"></lucide-icon>
-                  }
-                </button>
-              </div>
-
-              @if (metodoPagamento() === 'DEBITO' || metodoPagamento() === 'CREDITO') {
-                <div class="mt-4 space-y-3">
-                  <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">Número do Cartão</label>
-                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19"
-                      class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400/20 focus:border-red-400 transition text-gray-700 text-sm">
-                  </div>
-                  <div class="grid grid-cols-2 gap-3">
-                    <div>
-                      <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">Validade</label>
-                      <input type="text" placeholder="MM/AA" maxlength="5"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400/20 focus:border-red-400 transition text-gray-700 text-sm">
-                    </div>
-                    <div>
-                      <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 block">CVV</label>
-                      <input type="text" placeholder="123" maxlength="3"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-400/20 focus:border-red-400 transition text-gray-700 text-sm">
-                    </div>
-                  </div>
+            <!-- Impacto Ambiental -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-6">
+              <div class="flex gap-4">
+                <lucide-icon name="leaf" class="w-6 h-6 text-emerald-600 mt-1"></lucide-icon>
+                <div>
+                  <p class="font-semibold text-emerald-800">Impacto Ambiental</p>
+                  <p class="text-emerald-700">
+                    Esta compra ajudará a evitar <strong>{{ co2Economizado() }} kg de CO₂</strong>
+                  </p>
                 </div>
-              }
-
-              @if (metodoPagamento() === 'PIX') {
-                <div class="mt-4 bg-gray-50 rounded-xl p-5 text-center border border-gray-200">
-                  <p class="text-sm font-bold text-gray-600 mb-3">Chave PIX do restaurante</p>
-                  <div class="w-20 h-20 bg-white rounded-xl mx-auto flex items-center justify-center border border-gray-200 mb-3">
-                    <lucide-icon name="smartphone" class="w-8 h-8 text-gray-400"></lucide-icon>
-                  </div>
-                  <p class="text-xs text-gray-400">Escaneie ou copie a chave PIX ao confirmar</p>
-                </div>
-              }
-            </div>
-
-            @if (erro()) {
-              <div class="bg-red-50 border border-red-100 text-red-500 text-sm rounded-xl px-4 py-3 text-center flex items-center justify-center gap-2">
-                <lucide-icon name="alert-circle" class="w-4 h-4"></lucide-icon>
-                {{ erro() }}
               </div>
-            }
-
-            <div class="space-y-2">
-              <button (click)="confirmarPagamento()" [disabled]="!metodoPagamento() || enviando()"
-                class="w-full bg-red-500 text-white font-bold py-4 rounded-xl hover:bg-red-600 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-sm">
-                {{ enviando() ? 'Processando...' : !metodoPagamento() ? 'Selecione o pagamento' : 'Confirmar Pedido' }}
-              </button>
-              <button (click)="voltar()" class="w-full text-gray-400 font-semibold py-2 text-sm hover:text-gray-600 transition flex items-center justify-center gap-1">
-                <lucide-icon name="chevron-left" class="w-4 h-4"></lucide-icon>
-                Voltar ao cardápio
-              </button>
             </div>
+
+            <!-- Forma de Pagamento -->
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+              <h2 class="font-bold text-lg mb-4">Forma de Pagamento</h2>
+              
+              <div class="space-y-3">
+                <button (click)="selecionarMetodo('PIX')" 
+                  class="w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition"
+                  [class.border-emerald-500]="metodoPagamento() === 'PIX'"
+                  [class.bg-emerald-50]="metodoPagamento() === 'PIX'">
+                  <lucide-icon name="zap" class="w-6 h-6 text-green-600"></lucide-icon>
+                  <div class="flex-1 text-left">
+                    <p class="font-bold">PIX</p>
+                    <p class="text-xs text-gray-500">Pagamento instantâneo</p>
+                  </div>
+                </button>
+
+                <button (click)="selecionarMetodo('DEBITO')" 
+                  class="w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition"
+                  [class.border-emerald-500]="metodoPagamento() === 'DEBITO'"
+                  [class.bg-emerald-50]="metodoPagamento() === 'DEBITO'">
+                  <lucide-icon name="credit-card" class="w-6 h-6 text-blue-600"></lucide-icon>
+                  <div class="flex-1 text-left">
+                    <p class="font-bold">Cartão de Débito</p>
+                  </div>
+                </button>
+
+                <button (click)="selecionarMetodo('CREDITO')" 
+                  class="w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition"
+                  [class.border-emerald-500]="metodoPagamento() === 'CREDITO'"
+                  [class.bg-emerald-50]="metodoPagamento() === 'CREDITO'">
+                  <lucide-icon name="wallet" class="w-6 h-6 text-purple-600"></lucide-icon>
+                  <div class="flex-1 text-left">
+                    <p class="font-bold">Cartão de Crédito</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <button (click)="confirmarPagamento()" 
+              [disabled]="!metodoPagamento() || enviando()"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-bold py-4 rounded-3xl transition">
+              {{ enviando() ? 'Processando...' : 'Confirmar Pedido' }}
+            </button>
 
           </div>
         }
@@ -179,29 +126,36 @@ type MetodoPagamento = 'PIX' | 'DEBITO' | 'CREDITO' | null;
 })
 export class PagamentoComponent {
   service = inject(ApiService);
-  router  = inject(Router);
+  router = inject(Router);
 
-  enviando         = signal(false);
-  erro             = signal('');
+  enviando = signal(false);
   pedidoConfirmado = signal(false);
-  metodoPagamento  = signal<MetodoPagamento>(null);
+  metodoPagamento = signal<MetodoPagamento>(null);
 
   total = computed(() =>
-    this.service.carrinhoItens().reduce((acc, item: any) => acc + item.preco, 0)
+    this.service.carrinhoItens().reduce((acc, item: any) => 
+      acc + (item.precoPromocional || item.preco || 0), 0)
   );
 
-  selecionarMetodo(m: MetodoPagamento) { this.metodoPagamento.set(m); }
+  co2Economizado = computed(() => {
+    const total = this.service.carrinhoItens().reduce((acc, item: any) => {
+      return acc + (item.co2EconomizadoKg || 2.5);
+    }, 0);
+    return total.toFixed(1);
+  });
+
+  selecionarMetodo(m: MetodoPagamento) {
+    this.metodoPagamento.set(m);
+  }
 
   confirmarPagamento() {
     if (!this.metodoPagamento()) return;
+
     const itens = this.service.carrinhoItens();
     if (itens.length === 0) return;
-    const restauranteId = itens[0]?.restauranteId;
 
-    if (!restauranteId) {
-      this.erro.set('Não foi possível identificar o restaurante. Volte e tente novamente.');
-      return;
-    }
+    const restauranteId = itens[0]?.restauranteId;
+    if (!restauranteId) return;
 
     const payload = {
       restauranteId,
@@ -209,7 +163,6 @@ export class PagamentoComponent {
     };
 
     this.enviando.set(true);
-    this.erro.set('');
 
     this.service.realizarPedido(payload).subscribe({
       next: () => {
@@ -217,13 +170,14 @@ export class PagamentoComponent {
         this.service.limparCarrinho();
         this.pedidoConfirmado.set(true);
       },
-      error: (err) => {
+      error: () => {
         this.enviando.set(false);
-        this.erro.set(err.error?.erro ?? 'Erro ao realizar pedido.');
+        alert('Erro ao confirmar pedido. Tente novamente.');
       }
     });
   }
 
-  voltar()     { this.router.navigate(['/restaurantes']); }
-  voltarHome() { this.router.navigate(['/restaurantes']); }
+  voltarHome() {
+    this.router.navigate(['/restaurantes']);
+  }
 }
