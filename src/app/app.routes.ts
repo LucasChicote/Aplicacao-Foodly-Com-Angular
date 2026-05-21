@@ -4,33 +4,35 @@ import { adminGuard } from './guards/admin.guard';
 import { ownerGuard } from './guards/owner.guard';
 
 import { WelcomeComponent }           from './pages/Welcome/welcome';
-import { LoginComponent }              from './login/login';
-import { FormComponent }               from './form/form';
-import { HomeComponent }               from './home/home';
-import { PagamentoComponent }          from './pages/pagamento/pagamento';
-import { PerfilComponent }             from './pages/perfil/perfil';
-import { MeusPedidosComponent }        from './pages/pedidos/meus-pedidos';
-import { AdminComponent }              from './pages/admin/admin';
-import { DashboardOwnerComponent }     from './pages/restaurante/dashboard-owner';
-import { RestaurantesComponent }       from './pages/restaurantes/restaurantes';       
-import { RestauranteDetalheComponent } from './pages/restaurantes/restaurante-detalhe'; 
-import { KitsComponent }               from './pages/kits/kits.component';
+import { LoginComponent }             from './login/login';
+import { FormComponent }              from './form/form';
+import { HomeComponent }              from './home/home';
+import { PagamentoComponent }         from './pages/pagamento/pagamento';
+import { PerfilComponent }            from './pages/perfil/perfil';
+import { MeusPedidosComponent }       from './pages/pedidos/meus-pedidos';
+import { AdminComponent }             from './pages/admin/admin';
+import { DashboardOwnerComponent }    from './pages/restaurante/dashboard-owner';
+import { RestaurantesComponent }      from './pages/restaurantes/restaurantes';
+import { RestauranteDetalheComponent } from './pages/restaurantes/restaurante-detalhe';
+import { KitsComponent }              from './pages/kits/kits';
+import { AdminLoginComponent }        from './pages/admin-login/admin-login';
 
 export const routes: Routes = [
-  { path: '',        component: WelcomeComponent },
-  { path: 'login',   component: LoginComponent },
-  { path: 'cadastro', component: FormComponent },
+  { path: '',           component: WelcomeComponent },
+  { path: 'login',      component: LoginComponent },
+  { path: 'cadastro',   component: FormComponent },
+  { path: 'admin-login', component: AdminLoginComponent },
 
-  { path: 'home',         component: HomeComponent,         canActivate: [authGuard] },
-  { path: 'pagamento',    component: PagamentoComponent,    canActivate: [authGuard] },
-  { path: 'perfil',       component: PerfilComponent,       canActivate: [authGuard] },
-  { path: 'meus-pedidos', component: MeusPedidosComponent,  canActivate: [authGuard] },
+  { path: 'home',         component: HomeComponent,        canActivate: [authGuard] },
+  { path: 'pagamento',    component: PagamentoComponent,   canActivate: [authGuard] },
+  { path: 'perfil',       component: PerfilComponent,      canActivate: [authGuard] },
+  { path: 'meus-pedidos', component: MeusPedidosComponent, canActivate: [authGuard] },
+  { path: 'kits',         component: KitsComponent,        canActivate: [authGuard] },
 
-  { path: 'restaurantes',        component: RestaurantesComponent,       canActivate: [authGuard] },
-  { path: 'restaurante/:id',     component: RestauranteDetalheComponent, canActivate: [authGuard] },
-  { path: 'kits',                component: KitsComponent,               canActivate: [authGuard] },
+  { path: 'restaurantes',    component: RestaurantesComponent,       canActivate: [authGuard] },
+  { path: 'restaurante/:id', component: RestauranteDetalheComponent, canActivate: [authGuard] },
 
-  { path: 'admin',           component: AdminComponent,          canActivate: [authGuard, adminGuard] },
+  { path: 'admin',           component: AdminComponent,         canActivate: [authGuard, adminGuard] },
   { path: 'dashboard-owner', component: DashboardOwnerComponent, canActivate: [authGuard, ownerGuard] },
 
   { path: '**', redirectTo: '' }

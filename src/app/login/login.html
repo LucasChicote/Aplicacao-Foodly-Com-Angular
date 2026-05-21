@@ -10,10 +10,8 @@
       Voltar
     </a>
 
-    <div class="text-center mb-10">
-      <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200 mx-auto mb-4">
-        <lucide-icon name="leaf" class="w-8 h-8 text-white"></lucide-icon>
-      </div>
+    <div class="text-center mb-8">
+      <img src="assets/logo.png" alt="Foodly" class="w-16 h-16 rounded-2xl object-cover shadow-lg shadow-green-200 mx-auto mb-4">
       <h2 class="text-3xl font-black text-gray-900 tracking-tighter">Bem-vindo!</h2>
       <p class="text-gray-400 text-sm font-medium mt-1">Entre para pedir de forma sustentável.</p>
     </div>
@@ -34,9 +32,6 @@
           <input formControlName="email" type="email" placeholder="seu@email.com"
             class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 pl-12 outline-none focus:ring-2 focus:ring-green-400/30 focus:border-green-300 transition-all text-gray-700">
         </div>
-        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-          <p class="text-red-400 text-xs mt-1 ml-2">E-mail inválido</p>
-        }
       </div>
 
       <div>
@@ -71,5 +66,12 @@
         <a routerLink="/cadastro" class="text-green-600 font-bold hover:underline ml-1">Criar uma conta</a>
       </p>
     </div>
+
+    <div class="mt-4 text-center">
+      <a routerLink="/admin-login" class="text-[11px] text-gray-200 hover:text-gray-400 transition">
+        acesso restrito
+      </a>
+    </div>
+
   </div>
 </div>

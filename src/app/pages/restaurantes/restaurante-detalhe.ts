@@ -55,9 +55,9 @@ import { LucideAngularModule } from 'lucide-angular';
             <button
               (click)="categoriaSelecionada.set(null)"
               class="flex-none px-4 py-2 rounded-xl text-xs font-bold border-2 transition whitespace-nowrap"
-              [class.bg-red-500]="categoriaSelecionada() === null"
+              [class.bg-green-500]="categoriaSelecionada() === null"
               [class.text-white]="categoriaSelecionada() === null"
-              [class.border-red-500]="categoriaSelecionada() === null"
+              [class.border-green-500]="categoriaSelecionada() === null"
               [class.bg-white]="categoriaSelecionada() !== null"
               [class.text-gray-500]="categoriaSelecionada() !== null"
               [class.border-gray-200]="categoriaSelecionada() !== null">
@@ -68,9 +68,9 @@ import { LucideAngularModule } from 'lucide-angular';
               <button
                 (click)="categoriaSelecionada.set(cat)"
                 class="flex-none px-4 py-2 rounded-xl text-xs font-bold border-2 transition whitespace-nowrap"
-                [class.bg-red-500]="categoriaSelecionada() === cat"
+                [class.bg-green-500]="categoriaSelecionada() === cat"
                 [class.text-white]="categoriaSelecionada() === cat"
-                [class.border-red-500]="categoriaSelecionada() === cat"
+                [class.border-green-500]="categoriaSelecionada() === cat"
                 [class.bg-white]="categoriaSelecionada() !== cat"
                 [class.text-gray-500]="categoriaSelecionada() !== cat"
                 [class.border-gray-200]="categoriaSelecionada() !== cat">
@@ -83,7 +83,7 @@ import { LucideAngularModule } from 'lucide-angular';
             <lucide-icon name="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></lucide-icon>
             <input type="text" [(ngModel)]="termoBusca"
               placeholder="Buscar no cardápio..."
-              class="w-full bg-white border border-gray-200 rounded-xl p-3 pl-11 outline-none focus:ring-2 focus:ring-red-400/20 focus:border-red-400 transition shadow-sm text-gray-700 placeholder:text-gray-400 text-sm">
+              class="w-full bg-white border border-gray-200 rounded-xl p-3 pl-11 outline-none focus:ring-2 focus:ring-green-400/20 focus:border-green-400 transition shadow-sm text-gray-700 placeholder:text-gray-400 text-sm">
           </div>
 
           <div class="flex items-center justify-between mb-4">
@@ -95,7 +95,7 @@ import { LucideAngularModule } from 'lucide-angular';
 
           @if (carregando()) {
             <div class="text-center py-16">
-              <div class="w-8 h-8 border-4 border-gray-200 border-t-red-500 rounded-full animate-spin mx-auto mb-3"></div>
+              <div class="w-8 h-8 border-4 border-gray-200 border-t-green-500 rounded-full animate-spin mx-auto mb-3"></div>
               <p class="text-gray-400 text-sm">Carregando cardápio...</p>
             </div>
           } @else if (produtosFiltrados().length === 0) {
@@ -120,7 +120,7 @@ import { LucideAngularModule } from 'lucide-angular';
 
                   <div class="p-4">
                     @if (p.categoria) {
-                      <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest">{{ p.categoria }}</span>
+                      <span class="text-[10px] font-bold text-green-600 uppercase tracking-widest">{{ p.categoria }}</span>
                     }
                     <h3 class="font-bold text-gray-900 text-sm mt-0.5 leading-tight">{{ p.nome }}</h3>
                     <p class="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
@@ -129,7 +129,7 @@ import { LucideAngularModule } from 'lucide-angular';
                     <div class="flex items-center justify-between mt-3">
                       <span class="font-black text-lg text-gray-900">{{ p.preco | currency:'BRL' }}</span>
                       <button (click)="adicionarAoCarrinho(p)"
-                        class="bg-red-500 text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-red-600 active:scale-90 transition-all">
+                        class="bg-green-500 text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-green-600 active:scale-90 transition-all">
                         <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
                       </button>
                     </div>
@@ -145,11 +145,11 @@ import { LucideAngularModule } from 'lucide-angular';
 
             <div class="flex items-center justify-between mb-5">
               <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                <lucide-icon name="shopping-bag" class="w-5 h-5 text-red-500"></lucide-icon>
+                <lucide-icon name="shopping-bag" class="w-5 h-5 text-green-600"></lucide-icon>
                 Sacola
               </h2>
               @if (service.carrinhoItens().length > 0) {
-                <span class="bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <span class="bg-green-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {{ service.carrinhoItens().length }}
                 </span>
               }
@@ -177,7 +177,7 @@ import { LucideAngularModule } from 'lucide-angular';
                 </div>
 
                 <button (click)="irParaPagamento()"
-                  class="w-full bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition text-sm">
+                  class="w-full bg-green-500 text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition text-sm">
                   Finalizar Pedido
                 </button>
 

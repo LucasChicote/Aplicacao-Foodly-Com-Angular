@@ -7,17 +7,19 @@ export class ApiService {
   private http = inject(HttpClient);
   private readonly URL = 'http://localhost:8080';
 
-  produtos = signal<any[]>([]);
-  categorias = signal<any[]>([]);
-  restaurantes = signal<any[]>([]);
-  kits = signal<any[]>([]);
+  produtos      = signal<any[]>([]);
+  categorias    = signal<any[]>([]);
+  restaurantes  = signal<any[]>([]);
   carrinhoItens = signal<any[]>([]);
 
   login(dados: { email: string; senha: string }): Observable<any> {
     return this.http.post(`${this.URL}/auth/login`, dados);
   }
 
-  cadastrar(dados: any): Observable<any> {
+  cadastrar(dados: {
+    nome: string; email: string; senha: string;
+    cep: string; role: 'ROLE_CUSTOMER' | 'ROLE_RESTAURANT_OWNER' | 'ROLE_ADMIN';
+  }): Observable<any> {
     return this.http.post(`${this.URL}/auth/register`, dados);
   }
 
@@ -55,7 +57,7 @@ export class ApiService {
     return this.http.get<any[]>(`${this.URL}/restaurantes/meus`);
   }
 
-  criarRestaurante(dados: any): Observable<any> {
+  criarRestaurante(dados: { nome: string; descricao: string; categoria: string; imagemUrl?: string }): Observable<any> {
     return this.http.post(`${this.URL}/restaurantes`, dados);
   }
 
@@ -64,24 +66,39 @@ export class ApiService {
       .subscribe(res => this.produtos.set(res));
   }
 
+  listarTodosProdutosObs(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}/produtos`);
+  }
+
+  listarProdutosPorCategoria(categoriaId: number) {
+    this.http.get<any[]>(`${this.URL}/produtos/categoria/${categoriaId}`)
+      .subscribe(res => this.produtos.set(res));
+  }
+
+  listarProdutosPorRestaurante(restauranteId: number) {
+    this.http.get<any[]>(`${this.URL}/produtos/restaurante/${restauranteId}`)
+      .subscribe(res => this.produtos.set(res));
+  }
+
   listarProdutosPorRestauranteObs(restauranteId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.URL}/produtos/restaurante/${restauranteId}`);
   }
 
-  criarProduto(dados: any): Observable<any> {
+  criarProduto(dados: {
+    nome: string; descricao: string; preco: number;
+    imagemUrl?: string; categoriaId?: number; categoriaNome?: string; restauranteId: number;
+  }): Observable<any> {
     return this.http.post(`${this.URL}/produtos`, dados);
   }
 
-  listarKits() {
-    this.http.get<any[]>(`${this.URL}/produtos/kits`)
-      .subscribe(res => this.kits.set(res));
+  deletarProduto(id: number): Observable<any> {
+    return this.http.delete(`${this.URL}/produtos/${id}`);
   }
 
-  buscarGlobal(termo: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.URL}/search?termo=${termo}`);
-  }
-
-  realizarPedido(dados: any): Observable<any> {
+  realizarPedido(dados: {
+    restauranteId: number;
+    itens: { produtoId: number; quantidade: number }[];
+  }): Observable<any> {
     return this.http.post(`${this.URL}/pedidos`, dados);
   }
 
@@ -116,11 +133,10 @@ export class ApiService {
     ['token','nome','email','role'].forEach(k => localStorage.removeItem(k));
   }
 
-  getNome(): string { return localStorage.getItem('nome') ?? 'Usuário'; }
-  getEmail(): string { return localStorage.getItem('email') ?? ''; }
-  getRole(): string { return localStorage.getItem('role') ?? ''; }
-
-  isAdmin(): boolean { return this.getRole() === 'ROLE_ADMIN'; }
-  isOwner(): boolean { return this.getRole() === 'ROLE_RESTAURANT_OWNER'; }
-  isCustomer(): boolean { return this.getRole() === 'ROLE_CUSTOMER'; }
+  getNome():     string  { return localStorage.getItem('nome')  ?? 'Usuário'; }
+  getEmail():    string  { return localStorage.getItem('email') ?? ''; }
+  getRole():     string  { return localStorage.getItem('role')  ?? ''; }
+  isAdmin():     boolean { return this.getRole() === 'ROLE_ADMIN'; }
+  isOwner():     boolean { return this.getRole() === 'ROLE_RESTAURANT_OWNER'; }
+  isCustomer():  boolean { return this.getRole() === 'ROLE_CUSTOMER'; }
 }
