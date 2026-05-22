@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "https://api-foodly-fng4.onrender.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "headers": {
+      "Origin": "https://api-foodly-fng4.onrender.com"
+    },
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}

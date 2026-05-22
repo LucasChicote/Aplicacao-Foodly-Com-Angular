@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
-  private readonly URL = 'https://api-foodly-sckd.onrender.com';
+  private readonly URL = 'https://api-foodly-fng4.onrender.com';
 
   produtos      = signal<any[]>([]);
   categorias    = signal<any[]>([]);
