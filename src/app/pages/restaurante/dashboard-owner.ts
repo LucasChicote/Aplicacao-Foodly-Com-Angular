@@ -32,7 +32,7 @@ const TIPOS_PRATO = [
       <div class="max-w-6xl mx-auto space-y-6">
 
         <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center gap-4">
-          <img src="assets/logo.png" alt="Foodly" class="w-12 h-12 rounded-xl object-cover shadow">
+          <img src="/assets/logo.png" alt="Foodly" class="w-12 h-12 rounded-xl object-cover shadow">
           <div>
             <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">Painel do Restaurante</p>
             <h1 class="text-xl font-black text-gray-900">{{ service.getNome() }}</h1>

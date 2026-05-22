@@ -12,7 +12,7 @@ import { LucideAngularModule } from 'lucide-angular';
       <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
 
         <div class="flex items-center gap-2 cursor-pointer" (click)="irHome()">
-          <img src="assets/logo.png" alt="Foodly" class="w-8 h-8 rounded-lg object-cover shadow-sm">
+          <img src="/assets/logo.png" alt="Foodly" class="w-8 h-8 rounded-lg object-cover shadow-sm">
           <span class="text-lg font-black text-gray-900 tracking-tight">Foodly</span>
         </div>
 
